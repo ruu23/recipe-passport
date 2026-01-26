@@ -149,6 +149,8 @@ recipe-passport/
 │   ├── styles/
 │   └── utils/
 
+---
+
 ## 🛠 Future Enhancements
 
 Add user comments and ratings
