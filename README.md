@@ -1,18 +1,18 @@
-# 🍽️ Recipe Passport  
+# 🍽️ Culinary Passport  
 ## Discover the World’s Flavors, One Recipe at a Time
 
 ---
 
-## 🌍 What is Recipe Passport?
+## 🌍 What is Culinary Passport?
 
-**Recipe Passport** is a global culinary platform designed to explore recipes from around the world — not just as food, but as **culture, story, and tradition**.  
+**Culinary Passport** is a global culinary platform designed to explore recipes from around the world — not just as food, but as **culture, story, and tradition**.  
 This project blends professional frontend engineering with real backend logic to deliver a rich, secure, and interactive experience.
 
 Built as part of **Project Nexus** for the ProDev Frontend Engineering Program, this application demonstrates advanced workflows, thoughtful architecture, and a polished user experience.
 
 ---
 
-## 🎯 Why Recipe Passport Matters
+## 🎯 Why Culinary Passport Matters
 
 You’ve come a long way in your development journey — from foundational apps to complex systems like Airbnb clones.
 
