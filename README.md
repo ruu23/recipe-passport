@@ -154,15 +154,11 @@ recipe-passport/
 
 ## 🛠 Future Enhancements
 
-Add user comments and ratings
-
-Implement multi-language support
-
-Build PWA functionality for offline access
-
-Add admin dashboard for recipe moderation
-
-Create social sharing and community features
+- Add user comments and ratings
+- Implement multi-language support
+- Build PWA functionality for offline access
+- Add admin dashboard for recipe moderation
+- Create social sharing and community features
 
 ---
 
@@ -171,10 +167,11 @@ Create social sharing and community features
 Recipe Passport is more than a project — it’s an expression of your journey as a developer.
 It captures your ability to:
 
-🧠 Think like an engineer
-📐 Build scalable, maintainable systems
-🎨 Design purposeful UX
-🔥 Present polished products to the world
+- 🧠 Think like an engineer  
+- 📐 Build scalable, maintainable systems  
+- 🎨 Design purposeful UX  
+- 🔥 Present polished products to the world  
+
 
 ---
 
