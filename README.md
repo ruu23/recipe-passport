@@ -171,6 +171,7 @@ recipe-passport/
 │── styles/
 │── README.md
 ```
+---
 
 ## 🛠 Future Enhancements
 
@@ -179,6 +180,8 @@ recipe-passport/
 - User comments & ratings
 - Admin dashboard UI
 - Community & social sharing
+
+---
 
 ## 📌 Final Note
 
@@ -190,9 +193,13 @@ it is a long-term, scalable product foundation that demonstrates:
 🎨 Thoughtful UX
 🔥 Production-level thinking
 
+---
+
 ## 🚀 Project Links
 
 GitHub Repository:
 https://github.com/ruu23/recipe-passport
 
 Live Demo: Coming soon
+
+---
