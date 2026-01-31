@@ -1,137 +1,156 @@
-# 🍽️ Recipie Passport  
+# 🍽️ Recipe Passport
 ## Discover the World’s Flavors, One Recipe at a Time
 
 ---
 
-## 🌍 What is Recipie Passport?
+## 🌍 What is Recipe Passport?
 
-**Recipie Passport** is a global culinary platform designed to explore recipes from around the world — not just as food, but as **culture, story, and tradition**.  
-This project blends professional frontend engineering with real backend logic to deliver a rich, secure, and interactive experience.
+**Recipe Passport** is a global culinary exploration platform designed to discover recipes from around the world — not only as meals, but as **culture, history, and storytelling**.
 
-Built as part of **Project Nexus** for the ProDev Frontend Engineering Program, this application demonstrates advanced workflows, thoughtful architecture, and a polished user experience.
+This project combines **modern frontend engineering** with a **real production-ready backend**, delivering a secure, scalable, and interactive experience.
+
+Built as part of **Project Nexus – ProDev Frontend Engineering Program**, it reflects professional workflows, clean architecture, and long-term product thinking.
 
 ---
 
-## 🎯 Why Recipie Passport Matters
+## 🎯 Why Recipe Passport Matters
 
-You’ve come a long way in your development journey — from foundational apps to complex systems like Airbnb clones.
+This project represents a shift from learning projects to **real-world software engineering**.
 
-Now it’s time to show the world **how you build software with intent, structure, and polish**.
+Recipe Passport demonstrates how to:
 
-Recipe Passport gives you the chance to:
-
-🚀 Build a real-world application using modern tooling  
-🛠 Showcase integrated frontend + backend logic  
-📚 Demonstrate design thinking, usability, and architecture  
-🎯 Create a portfolio piece that stands out to employers  
-🌐 Connect global cultures through food
+🚀 Build a full-stack application using modern tools  
+🛠 Design and secure a real backend (not mock data)  
+📚 Apply UX, architecture, and data modeling together  
+🎯 Create a portfolio-ready product  
+🌍 Connect cultures through food and storytelling  
 
 ---
 
 ## ✨ Project Vision
 
-Recipe Passport goes beyond a typical recipe app:
+Recipe Passport goes beyond a traditional recipe app:
 
-✔️ Rich user experiences for discovering dishes  
-✔️ Authentic cultural storytelling behind every recipe  
-✔️ Clean design inspired by global travel and exploration  
-✔️ Scalable architecture that grows with new features  
-✔️ Professional development workflows and documentation
+✔️ See food as a cultural journey  
+✔️ Preserve culinary heritage and stories  
+✔️ Deliver a cozy, travel-inspired experience  
+✔️ Scale easily with new countries and features  
+✔️ Follow professional engineering standards  
 
 ---
 
 ## 📌 Key Features
 
 ### 🧑‍🍳 User Experience
-- Browse recipes by country, cuisine, or category  
-- Search and filter by ingredients, popularity, or prep time  
-- See detailed recipe steps with images and cultural context  
-- Favorite recipes to return to later  
-- Share recipes with friends and community
+- Browse recipes by country and cuisine  
+- Search recipes by name, description, or ingredients  
+- View detailed steps, history, and nutrition benefits  
+- Save favorite recipes  
+- Responsive design for all devices  
 
-### 🔐 User Authentication
-- Secure signup & login (Supabase Auth)  
-- Profile management  
-- Personalized favorites and preferences
+### 🔐 Authentication & Roles
+- Secure signup & login using **Supabase Auth**
+- User profiles stored in a dedicated `profiles` table
+- Role-based access:
+  - **User**: browse & save favorites
+  - **Editor**: manage recipes and ingredients
+  - **Admin**: full control (recipes, countries, users)
 
-### 🗄 Data Management
-- Fully managed backend with Supabase  
-- Structured database for recipes, users, countries, and favorites  
-- Role-based access and Row Level Security (RLS)
-
-### 🧠 Smart Integrations
-- Fetch dynamic content with secure APIs  
-- Responsive UI for all devices  
-- Scalable architecture for future enhancements
+### 🗄️ Data & Backend Logic
+- PostgreSQL database with structured relations
+- Row Level Security (RLS) for all sensitive tables
+- Public read access for content
+- User-specific access for favorites & search history
+- Admin/editor-only write permissions
 
 ---
 
 ## 🛠 Technology Stack
 
 ### 🧠 Frontend
-- **Next.js** — for SSR, routing, and modern app structure  
-- **React & TypeScript** — robust and typed UI development  
-- **Tailwind CSS** — utility-first styling, responsive design  
-- **Supabase** — backend services for authentication and database  
-- **Vercel** — optional deployment platform
+- **Next.js** — routing, SSR, modern app structure  
+- **React + TypeScript** — fully typed UI  
+- **Tailwind CSS** — clean, responsive styling  
 
 ### 🗃 Backend (Supabase)
-- Authentication (email/password)  
-- PostgreSQL database  
-- Row Level Security for secure data access  
-- Serverless API with Supabase client
+- Supabase Auth (email/password)
+- PostgreSQL database
+- Row Level Security (RLS)
+- Generated TypeScript database types
+- Secure client-side API integration
 
 ---
 
 ## 🏗️ Architecture Overview
 
-1. **User visits the site**  
-2. User authenticates securely via Supabase  
-3. Frontend fetches recipes and metadata  
-4. Users browse, search, filter, favorite recipes  
-5. Supabase enforces secure access and returns data  
-6. UI updates dynamically with optimized performance  
+1. User visits the application  
+2. Authentication handled via Supabase  
+3. Frontend queries typed Supabase APIs  
+4. Public data fetched (countries, recipes)  
+5. Private data protected by RLS (favorites, profiles)  
+6. UI updates dynamically with type safety  
 
 ---
 
 ## 🗂 Database Design (Simplified)
 
-### Users
-- `id`, `name`, `email`, `avatar_url`, `created_at`
+### Profiles
+- `id`, `full_name`, `email`, `role`, `created_at`
+
+### Countries
+- `id`, `name`, `flag_emoji`, `description`, `image_url`
 
 ### Recipes
-- `id`, `title`, `description`, `country`, `image_url`, `ingredients`, `steps`, `created_at`
+- `id`, `country_id`, `name`, `history`, `difficulty`, `times`
+
+### Ingredients
+- `id`, `recipe_id`, `name`, `quantity`, `order_index`
+
+### Instructions
+- `id`, `recipe_id`, `step_number`, `instruction_text`
+
+### Nutrition Benefits
+- `id`, `recipe_id`, `ingredient_name`, `benefit_text`
 
 ### Favorites
-- `id`, `user_id`, `recipe_id`, `created_at`
+- `id`, `user_id`, `recipe_id`
 
-All tables enforce ownership and security policies via Supabase RLS.
-
----
-
-## 📈 Workflow & Development
-
-✔️ Plan features and wireframes  
-✔️ Build components with reusable UI patterns  
-✔️ Implement secure authentication  
-✔️ Model database with RLS policies  
-✔️ Integrate frontend and backend APIs  
-✔️ Test user flows and edge cases  
-✔️ Add responsive design for all screen sizes  
-✔️ Document architecture and decisions
+All tables are protected using **Supabase RLS policies**.
 
 ---
 
-## 🎨 Design & UX Inspiration
+## 🔐 Security & Access Control
 
-The visual presentation of Recipe Passport draws from:
+✔️ Public read-only access for content  
+✔️ User-specific access for favorites & profiles  
+✔️ Admin/editor-only access for data modification  
+✔️ Database-level security (not frontend-only)  
+✔️ Typed Supabase client prevents invalid queries  
+
+---
+
+## 📈 Workflow & Development Process
+
+✔️ Database schema design  
+✔️ RLS policy implementation  
+✔️ Role-based authorization  
+✔️ Typed API layer  
+✔️ Custom React hooks for roles  
+✔️ Error handling & edge cases  
+✔️ Ready for frontend UI implementation  
+
+---
+
+## 🎨 Design & UX Direction
+
+Inspired by:
 
 ✨ Travel journals  
-✨ World maps and cultural motifs  
-✨ Clean, readable typography  
-✨ Warm, appetizing food photography
+✨ Cultural storytelling  
+✨ Cozy, warm aesthetics  
+✨ Clean typography & food imagery  
 
-This aesthetic reflects the **storytelling of food and culture**.
+The goal is to make users **feel at home while exploring the world**.
 
 ---
 
@@ -139,44 +158,41 @@ This aesthetic reflects the **storytelling of food and culture**.
 
 ```bash
 recipe-passport/
+│── lib/
+│   └── supabase/
+│       ├── client.ts
+│       ├── auth.ts
+│       ├── api.ts
+│       └── database.types.ts
+│── hooks/
+│   └── useRole.ts
+│── components/
+│── pages/
+│── styles/
 │── README.md
-│── package.json
-│── next.config.js
-│── supabase/
-│── src/
-│   ├── components/
-│   ├── pages/
-│   ├── styles/
-│   └── utils/
 ```
-
----
 
 ## 🛠 Future Enhancements
 
-- Add user comments and ratings
-- Implement multi-language support
-- Build PWA functionality for offline access
-- Add admin dashboard for recipe moderation
-- Create social sharing and community features
+- Multi-language support
+- PWA offline mode
+- User comments & ratings
+- Admin dashboard UI
+- Community & social sharing
 
----
+## 📌 Final Note
 
-## 📌 Final Statement
+Recipe Passport is not just a project —
+it is a long-term, scalable product foundation that demonstrates:
 
-Recipe Passport is more than a project — it’s an expression of your journey as a developer.
-It captures your ability to:
-
-- 🧠 Think like an engineer  
-- 📐 Build scalable, maintainable systems  
-- 🎨 Design purposeful UX  
-- 🔥 Present polished products to the world  
-
-
----
+🧠 Engineering mindset
+📐 Clean architecture
+🎨 Thoughtful UX
+🔥 Production-level thinking
 
 ## 🚀 Project Links
 
-GitHub Repository: https://github.com/ruu23/The-Recipe-Passport
+GitHub Repository:
+https://github.com/ruu23/recipe-passport
 
-Live Demo: Add URL here
+Live Demo: Coming soon
