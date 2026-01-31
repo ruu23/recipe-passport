@@ -185,13 +185,13 @@ recipe-passport/
 
 ## 📌 Final Note
 
-Recipe Passport is not just a project —
+Recipe Passport is not just a project —  
 it is a long-term, scalable product foundation that demonstrates:
 
-🧠 Engineering mindset
-📐 Clean architecture
-🎨 Thoughtful UX
-🔥 Production-level thinking
+- 🧠 Engineering mindset  
+- 📐 Clean architecture  
+- 🎨 Thoughtful UX  
+- 🔥 Production-level thinking  
 
 ---
 
