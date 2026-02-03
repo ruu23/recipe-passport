@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-cream: #fdf8e9;
+  --color-cocoa: #7b3c15;
+  --color-whiteSoft: #ffffff;
+  --color-card: #f1c744;
+
+  --font-title: "Wedges", serif;
+  --font-body: "MilkTea", system-ui, sans-serif;
+
+  --text-title: 78.1px;
+  --text-subtitle: 37px;
+  --text-body: 28px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@font-face {
+  font-family: "Wedges";
+  src: url("/fonts/Wedges.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@font-face {
+  font-family: "MilkTea";
+  src: url("/fonts/HazelnutMilkTea.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    font-family: "MilkTea", system-ui, sans-serif;
+  }
+  h1,
+  h2 {
+    font-family: "Wedges", serif;
   }
 }
+@layer components {
+  .page-bg {
+    @apply min-h-screen bg-cream;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  .title {
+    @apply font-title text-title text-cocoa leading-tight uppercase;
+  }
+
+  .subtitle {
+    @apply font-title text-subtitle text-cocoa;
+  }
+
+  .paragraph {
+    @apply font-body text-body text-whiteSoft leading-relaxed;
+  }
+
+  .nav-item {
+    @apply font-title text-subtitle text-black px-8 py-2 rounded-full bg-card hover:cursor-pointer transition;
+  }
+
+  .card {
+    @apply bg-card font-title text-whiteSoft rounded-2xl p-6 shadow-lg;
+  }
+
+  .btn-primary {
+    @apply bg-card text-whiteSoft px-6 py-4 rounded-full uppercase font-title text-body hover:cursor-pointer transition;
+  }
+
+  .btn-icon-arrow {
+    @apply w-24 h-24 rounded-full flex items-center justify-center 
+           bg-card text-cream transition-all cursor-pointer;
+  }
 }
