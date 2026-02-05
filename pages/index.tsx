@@ -6,7 +6,7 @@ export default function Index() {
   
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center bg-no-repeat"
+      className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-cream"
       style={{ backgroundImage: `url('/images/background.png')` }}
     >
       {/* Title */}

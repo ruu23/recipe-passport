@@ -1,9 +1,25 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-  reactStrictMode: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "sgafttcsbadhacbzrrmt.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "i0.wp.com",
+      },
+      {
+        protocol: "https",
+        hostname: "falasteenifoodie.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com", // ✅ Add this
+      },
+    ],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

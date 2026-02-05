@@ -1,29 +1,43 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { resetPassword } from '@/lib/supabase/auth';
+import { signIn } from '@/lib/supabase/auth';
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('');
+export default function LoginIn() {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess(false);
     setLoading(true);
 
     try {
-      const { error: resetError } = await resetPassword(email);
+      const { data, error: signInError } = await signIn(
+        formData.email,
+        formData.password
+      );
 
-      if (resetError) {
-        setError(resetError.message);
+      if (signInError) {
+        setError(signInError.message);
       } else {
-        setSuccess(true);
+        // Redirect to home after successful login
+        router.push('/');
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred while sending reset email');
+      setError(err.message || 'An error occurred during login');
     } finally {
       setLoading(false);
     }
@@ -44,23 +58,17 @@ export default function ForgotPasswordPage() {
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-[#6B4423] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
-              FORGOT PASSWORD
+            <h1 className="text-5xl md:text-6xl font-bold text-[#6B4423] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+              LOGIN
             </h1>
             <p className="text-sm text-[#6B4423] mt-4 uppercase tracking-wide">
-              New Password
+              Sign in to continue
             </p>
           </div>
 
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
               {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-              Password reset email sent! Please check your inbox.
             </div>
           )}
 
@@ -73,9 +81,25 @@ export default function ForgotPasswordPage() {
               <input
                 type="email"
                 name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="hello@realgreatsite.com"
+                required
+                className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
+              />
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <label className="block text-xs font-semibold text-[#6B4423] mb-1 uppercase tracking-wide">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••"
                 required
                 className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
               />
@@ -87,18 +111,28 @@ export default function ForgotPasswordPage() {
               disabled={loading}
               className="w-full bg-[#6B4423] text-white font-bold py-3 px-6 rounded hover:bg-[#8B5A2B] transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
             >
-              {loading ? 'Sending...' : 'Send'}
+              {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
 
-          {/* Back to Login Link */}
+          {/* Forgot Password Link */}
           <div className="text-center mt-6">
             <Link 
-              href="/auth/login" 
+              href="/auth/forgot-password" 
               className="text-sm text-[#6B4423] hover:text-[#8B5A2B] underline"
             >
-              Back to login
+              Forgot password?
             </Link>
+          </div>
+
+          {/* Sign Up Link */}
+          <div className="text-center mt-4">
+            <p className="text-sm text-[#6B4423]">
+              Don't have an account?{' '}
+              <Link href="/auth/signup" className="underline hover:text-[#8B5A2B] font-semibold">
+                Sign up
+              </Link>
+            </p>
           </div>
         </div>
       </div>

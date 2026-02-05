@@ -1,56 +1,89 @@
-// lib/supabase/auth.ts
-import { supabase } from './client'
+import { supabase } from './client';
 
-export const auth = {
-  async signUp(email: string, password: string, fullName?: string) {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
+/**
+ * Sign up a new user
+ */
+export async function signUp(
+  email: string,
+  password: string,
+  fullName?: string,
+  dateOfBirth?: string
+) {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name: fullName,
+        age_or_birth: dateOfBirth,
       },
-    })
-    if (error) throw error
-    return data
-  },
+    },
+  });
 
-  async signIn(email: string, password: string) {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) throw error
-    return data
-  },
+  return { data, error };
+}
 
-  async signOut() {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
-  },
+/**
+ * Sign in an existing user
+ */
+export async function signIn(email: string, password: string) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-  async getSession() {
-    const { data, error } = await supabase.auth.getSession()
-    if (error) throw error
-    return data.session
-  },
+  return { data, error };
+}
 
-  async getUser() {
-    const { data, error } = await supabase.auth.getUser()
-    if (error) throw error
-    return data.user // ممكن تكون null
-  },
+/**
+ * Sign out the current user
+ */
+export async function signOut() {
+  const { error } = await supabase.auth.signOut();
+  return { error };
+}
 
-  // ⚠️ استخدميها في Client Components فقط (عشان window)
-  async resetPassword(email: string) {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
-    })
-    if (error) throw error
-  },
+/**
+ * Get the current user session
+ */
+export async function getSession() {
+  const { data, error } = await supabase.auth.getSession();
+  return { data, error };
+}
 
-  async updatePassword(newPassword: string) {
-    const { error } = await supabase.auth.updateUser({ password: newPassword })
-    if (error) throw error
-  },
+/**
+ * Get the current user
+ */
+export async function getCurrentUser() {
+  const { data: { user }, error } = await supabase.auth.getUser();
+  return { user, error };
+}
 
-  onAuthStateChange(callback: (event: string, session: any) => void) {
-    return supabase.auth.onAuthStateChange(callback)
-  },
+/**
+ * Send password reset email
+ */
+export async function resetPassword(email: string) {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/auth/update-password`,
+  });
+
+  return { data, error };
+}
+
+/**
+ * Update user password
+ */
+export async function updatePassword(newPassword: string) {
+  const { data, error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  return { data, error };
+}
+
+/**
+ * Listen for auth state changes
+ */
+export function onAuthStateChange(callback: (event: string, session: any) => void) {
+  return supabase.auth.onAuthStateChange(callback);
 }

@@ -1,29 +1,50 @@
 import { useState } from 'react';
-import Link from 'next/link';
-import { resetPassword } from '@/lib/supabase/auth';
+import { useRouter } from 'next/router';
+import { updatePassword } from '@/lib/supabase/auth';
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('');
+export default function UpdatePasswordPage() {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    newPassword: '',
+    confirmPassword: '',
+  });
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess(false);
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (formData.newPassword.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const { error: resetError } = await resetPassword(email);
+      const { error: updateError } = await updatePassword(formData.newPassword);
 
-      if (resetError) {
-        setError(resetError.message);
+      if (updateError) {
+        setError(updateError.message);
       } else {
-        setSuccess(true);
+        // Redirect to login after successful password update
+        router.push('/auth/login?message=Password updated successfully');
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred while sending reset email');
+      setError(err.message || 'An error occurred while updating password');
     } finally {
       setLoading(false);
     }
@@ -45,10 +66,10 @@ export default function ForgotPasswordPage() {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold text-[#6B4423] mb-2" style={{ fontFamily: 'Georgia, serif' }}>
-              FORGOT PASSWORD
+              UPDATE PASSWORD
             </h1>
             <p className="text-sm text-[#6B4423] mt-4 uppercase tracking-wide">
-              New Password
+              Enter your new password
             </p>
           </div>
 
@@ -58,24 +79,34 @@ export default function ForgotPasswordPage() {
             </div>
           )}
 
-          {success && (
-            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-              Password reset email sent! Please check your inbox.
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email Input */}
+            {/* New Password Input */}
             <div>
               <label className="block text-xs font-semibold text-[#6B4423] mb-1 uppercase tracking-wide">
-                Email
+                New Password
               </label>
               <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="hello@realgreatsite.com"
+                type="password"
+                name="newPassword"
+                value={formData.newPassword}
+                onChange={handleChange}
+                placeholder="••••••"
+                required
+                className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
+              />
+            </div>
+
+            {/* Confirm Password Input */}
+            <div>
+              <label className="block text-xs font-semibold text-[#6B4423] mb-1 uppercase tracking-wide">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="••••••"
                 required
                 className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
               />
@@ -87,19 +118,9 @@ export default function ForgotPasswordPage() {
               disabled={loading}
               className="w-full bg-[#6B4423] text-white font-bold py-3 px-6 rounded hover:bg-[#8B5A2B] transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
             >
-              {loading ? 'Sending...' : 'Send'}
+              {loading ? 'Updating...' : 'Update Password'}
             </button>
           </form>
-
-          {/* Back to Login Link */}
-          <div className="text-center mt-6">
-            <Link 
-              href="/auth/login" 
-              className="text-sm text-[#6B4423] hover:text-[#8B5A2B] underline"
-            >
-              Back to login
-            </Link>
-          </div>
         </div>
       </div>
     </div>
