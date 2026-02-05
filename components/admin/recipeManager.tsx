@@ -854,35 +854,34 @@ export default function RecipeManager() {
             )}
 
             {/* ✅ Quote */}
-<div>
-  <label className="block text-sm font-semibold text-[#6B4423] mb-1">
-    Quote Text
-  </label>
-  <textarea
-    value={formData.quote_text}
-    onChange={(e) => setFormData({ ...formData, quote_text: e.target.value })}
-    rows={3}
-    className="w-full px-4 py-2 border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423]"
-    placeholder='Example: "Some problems need answers. Others need"'
-  />
-</div>
+            <div>
+              <label className="block text-sm font-semibold text-[#6B4423] mb-1">
+                Quote Text
+              </label>
+              <textarea
+                value={formData.quote_text}
+                onChange={(e) => setFormData({ ...formData, quote_text: e.target.value })}
+                rows={3}
+                className="w-full px-4 py-2 border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423]"
+                placeholder='Example: "Some problems need answers. Others need"'
+              />
+            </div>
 
-<div>
-  <label className="block text-sm font-semibold text-[#6B4423] mb-1">
-    Quote Highlight (optional)
-  </label>
-  <input
-    type="text"
-    value={formData.quote_highlight}
-    onChange={(e) => setFormData({ ...formData, quote_highlight: e.target.value })}
-    className="w-full px-4 py-2 border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423]"
-    placeholder="Example: MULUKHIYAH"
-  />
-  <p className="text-xs text-gray-500 mt-1">
-    If empty, you can display the recipe name as the highlight.
-  </p>
-</div>
-
+            <div>
+              <label className="block text-sm font-semibold text-[#6B4423] mb-1">
+                Quote Highlight (optional)
+              </label>
+              <input
+                type="text"
+                value={formData.quote_highlight}
+                onChange={(e) => setFormData({ ...formData, quote_highlight: e.target.value })}
+                className="w-full px-4 py-2 border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423]"
+                placeholder="Example: MULUKHIYAH"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                If empty, you can display the recipe name as the highlight.
+              </p>
+            </div>
 
             {/* Buttons */}
             <div className="flex gap-3">

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import Loader from "@/components/layout/Loader";
 
 type Country = {
   id: string;
@@ -156,9 +157,7 @@ export default function CountryPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-cream">
-        <div className="max-w-6xl mx-auto px-6 lg:px-16 pt-10 pb-16 text-cocoa font-semibold">
-          Loading...
-        </div>
+        <Loader />
       </div>
     );
   }

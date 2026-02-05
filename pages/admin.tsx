@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import CountryManager from '@/components/admin/countryManager';
 import RecipeManager from '@/components/admin/recipeManager';
+import Loader from '@/components/layout/Loader';
 
 type TabType = 'countries' | 'recipes';
 
@@ -51,12 +52,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-[#FFF8E7] flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-[#E8B44F] border-t-[#6B4423] rounded-full animate-spin mx-auto"></div>
-            <p className="mt-4 text-[#6B4423] font-semibold">Loading...</p>
-          </div>
-        </div>
+        <Loader />
       </ProtectedRoute>
     );
   }
@@ -64,7 +60,7 @@ export default function AdminPage() {
   if (!isAdmin) {
     return (
       <ProtectedRoute>
-        <div className="min-h-screen bg-[#FFF8E7] flex items-center justify-center">
+        <div className="page-bg flex items-center justify-center">
           <div className="max-w-md text-center p-8 bg-white rounded-lg shadow-lg">
             <h1 className="text-3xl font-bold text-red-600 mb-4">Access Denied</h1>
             <p className="text-gray-700 mb-6">
@@ -84,23 +80,16 @@ export default function AdminPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-[#FFF8E7]">
+      <div className="page-bg">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#E8B44F] to-[#D4A439] shadow-md">
+        <div className="bg-card shadow-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-white" style={{ fontFamily: 'Georgia, serif' }}>
+                <h1 className="title">
                   Admin Dashboard
                 </h1>
-                <p className="text-white/80 mt-1">Manage countries and recipes</p>
               </div>
-              <button
-                onClick={() => router.push('/home')}
-                className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded transition-colors"
-              >
-                ← Back to Home
-              </button>
             </div>
           </div>
         </div>
@@ -111,23 +100,23 @@ export default function AdminPage() {
             <div className="flex space-x-8">
               <button
                 onClick={() => setActiveTab('countries')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`subtitle border-b-2 transition-colors hover:cursor-pointer ${
                   activeTab === 'countries'
-                    ? 'border-[#6B4423] text-[#6B4423]'
+                    ? 'border-[#6B4423] text-black'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                🌍 Countries
+                Countries
               </button>
               <button
                 onClick={() => setActiveTab('recipes')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`subtitle border-b-2 transition-colors hover:cursor-pointer ${
                   activeTab === 'recipes'
-                    ? 'border-[#6B4423] text-[#6B4423]'
+                    ? 'border-[#6B4423] text-black'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                🍽️ Recipes
+                Recipes
               </button>
             </div>
           </div>

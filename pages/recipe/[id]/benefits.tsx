@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { getRecipeFull } from "@/lib/supabase/recipes";
+import Loader from "@/components/layout/Loader";
 
 type BenefitRow = {
   id: string;
@@ -55,7 +56,7 @@ export default function BenefitsPage() {
     if (!active && tabs.length > 0) setActive(tabs[0]);
   }, [active, tabs]);
 
-  if (loading) return <div className="p-10">Loading...</div>;
+  if (loading) return <Loader />;
   if (data?.error) return <div className="p-10">Error: {String(data.error.message)}</div>;
 
   const recipe = data.recipe;

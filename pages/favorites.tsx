@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase/client";
 import { getUserFavorites } from "@/lib/supabase/favorites";
 import { useRouter } from "next/router";
 import Footer from "@/components/layout/Footer";
+import Loader from "@/components/layout/Loader";
 
 interface Recipe {
   id: string;
@@ -26,7 +27,7 @@ export default function FavoritesPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/login");
+        router.push("/auth/login"); // ✅ Fixed: was "/login", now "/auth/login"
         return;
       }
 
@@ -44,14 +45,14 @@ export default function FavoritesPage() {
       <Header />
       <main className="px-6 lg:px-16 py-12">
         <h1 className="text-[42px] font-bold text-[#6B4423] mb-10">
-          YOUR FAVORITE PLATES ❤️
+          {`YOUR FAVORITE PLATES <3`}
         </h1>
 
-        {loading && <p className="text-[#6B4423]">Loading...</p>}
+        {loading && <Loader />}
 
         {!loading && recipes.length === 0 && (
           <p className="text-[#6B4423] text-lg">
-            You haven’t added any favorites yet 🍽️
+            {`You haven't added any favorites yet.`}
           </p>
         )}
 
@@ -59,17 +60,21 @@ export default function FavoritesPage() {
           {recipes.map((recipe) => (
             <button
               key={recipe.id}
-              onClick={() => router.push(`/recipes/${recipe.id}`)}
+              onClick={() => router.push(`/recipe/${recipe.id}`)}
               className="group text-left"
             >
               <div className="relative w-full h-[220px] rounded-3xl overflow-hidden shadow-md">
-                {recipe.image_url && (
+                {recipe.image_url ? (
                   <Image
                     src={recipe.image_url}
                     alt={recipe.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform"
                   />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400">No image</span>
+                  </div>
                 )}
               </div>
 
@@ -87,7 +92,7 @@ export default function FavoritesPage() {
         </div>
       </main>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 }
