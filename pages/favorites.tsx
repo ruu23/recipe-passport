@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import { supabase } from "@/lib/supabase/client";
 import { getUserFavorites } from "@/lib/supabase/favorites";
 import { useRouter } from "next/router";
+import Footer from "@/components/layout/Footer";
 
 interface Recipe {
   id: string;
@@ -40,6 +41,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="min-h-screen bg-[#FBF6EA]">
+      <Header />
       <main className="px-6 lg:px-16 py-12">
         <h1 className="text-[42px] font-bold text-[#6B4423] mb-10">
           YOUR FAVORITE PLATES ❤️
@@ -84,6 +86,8 @@ export default function FavoritesPage() {
           ))}
         </div>
       </main>
+
+      <Footer/>
     </div>
   );
 }

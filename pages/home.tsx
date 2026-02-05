@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabase/client";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
 
 type HomeRecipe = {
   id: string;
@@ -125,8 +127,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-cream">
+      <Header />
       
-
       <main className="px-6 lg:px-16 pt-10 pb-16">
         {/* Search row */}
         <div className="w-full max-w-[720px]">
@@ -268,6 +270,8 @@ export default function Home() {
         </div>
         
       </main>
+
+      <Footer />
     </div>
   );
 }

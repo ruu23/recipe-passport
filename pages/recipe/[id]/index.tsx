@@ -2,6 +2,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getRecipeFull } from "@/lib/supabase/recipes";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
 
 export default function RecipeHistoryPage() {
   const router = useRouter();
@@ -28,6 +30,8 @@ export default function RecipeHistoryPage() {
 
   return (
     <div className="min-h-screen bg-[#FBF6EA] p-8">
+      <Header />
+
       <div className="max-w-5xl mx-auto">
         {/* Top image */}
         <div className="relative w-full h-[340px] md:h-[420px] rounded-3xl overflow-hidden">
@@ -89,6 +93,8 @@ export default function RecipeHistoryPage() {
           </button>
         </div>
       </div>
+
+      <Footer/>
     </div>
   );
 }

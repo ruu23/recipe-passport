@@ -3,6 +3,7 @@ import Header from "@/components/layout/Header";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { getCountries } from "@/lib/supabase/admin"; // you already have this
+import Footer from "@/components/layout/Footer";
 
 type Country = {
   id: string;
@@ -39,6 +40,7 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-cream">
+      <Header />
       <main className="px-6 lg:px-16 pt-10 pb-16">
         {/* ===== HERO (like Canva Page 8) ===== */}
         <div className="relative w-full max-w-6xl mx-auto rounded-[32px] overflow-hidden bg-[#FBF6EA]">
@@ -153,6 +155,8 @@ export default function ExplorePage() {
           </div>
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 }
