@@ -1,3 +1,4 @@
+// lib/supabase/auth.ts
 import { supabase } from './client';
 
 /**
@@ -87,3 +88,17 @@ export async function updatePassword(newPassword: string) {
 export function onAuthStateChange(callback: (event: string, session: any) => void) {
   return supabase.auth.onAuthStateChange(callback);
 }
+
+/**
+ * Auth object for convenient access
+ */
+export const auth = {
+  signUp,
+  signIn,
+  signOut,
+  getSession,
+  getUser: getCurrentUser,
+  resetPassword,
+  updatePassword,
+  onAuthStateChange,
+};

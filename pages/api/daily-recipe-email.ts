@@ -19,20 +19,23 @@ export default async function handler() {
     .order("random()")
     .limit(1);
 
-
   if (!recipes?.length) return;
 
   const recipe = recipes[0];
 
-  // 2️⃣ get users
+  // 2️⃣ get users with valid emails
   const { data: users } = await supabase
     .from("profiles")
-    .select("email");
+    .select("email")
+    .not("email", "is", null);
 
   if (!users?.length) return;
 
   // 3️⃣ send emails
   for (const user of users) {
+    // Extra safety check
+    if (!user.email) continue;
+
     await transporter.sendMail({
       from: process.env.SMTP_FROM,
       to: user.email,
@@ -44,7 +47,7 @@ export default async function handler() {
         <p>${recipe.description ?? ""}</p>
 
         <p>
-          Discover today’s recipe and explore its story inside the app.
+          Discover today's recipe and explore its story inside the app.
         </p>
 
         <p>Warm wishes,<br/>Arwa</p>

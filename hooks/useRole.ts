@@ -4,7 +4,6 @@ import { auth } from "@/lib/supabase/auth"
 import { userAPI } from "@/lib/supabase/api"
 import type { Database } from "@/lib/supabase/database.types"
 
-// ✅ خلي الـ Role جاية من التايبس الحقيقية بتاعة Supabase
 export type UserRole = Database["public"]["Tables"]["profiles"]["Row"]["role"]
 
 export function useRole() {
@@ -14,10 +13,12 @@ export function useRole() {
   useEffect(() => {
     async function loadRole() {
       try {
-        const user = await auth.getUser()
+        const { user, error } = await auth.getUser()
+        if (error) throw error
+        
         if (user) {
           const profile = await userAPI.getProfile(user.id)
-          setRole(profile.role) // ✅ دلوقتي مش string
+          setRole(profile.role)
         } else {
           setRole(null)
         }

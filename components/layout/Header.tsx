@@ -15,30 +15,44 @@ function Header() {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  type Role = "user" | "editor" | "admin";
+
+  const isRole = (v: unknown): v is Role =>
+    v === "user" || v === "editor" || v === "admin";
+
   const [role, setRole] = useState<"user" | "editor" | "admin" | null>(null);
 
   useEffect(() => {
-    let ignore = false;
+  let ignore = false;
 
-    const loadRole = async () => {
-      if (!user) {
-        setRole(null);
-        return;
-      }
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
+  const loadRole = async () => {
+    if (!user?.id) {
+      setRole(null);
+      return;
+    }
 
-      if (!ignore) setRole(error ? null : (data?.role ?? null));
-    };
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
 
-    loadRole();
-    return () => {
-      ignore = true;
-    };
-  }, [user]);
+    if (ignore) return;
+
+    if (error) {
+      setRole(null);
+      return;
+    }
+
+    const r = data?.role;
+    setRole(isRole(r) ? r : null);
+  };
+
+  loadRole();
+  return () => {
+    ignore = true;
+  };
+}, [user]);
 
   const go = (path: string) => {
     setOpen(false);

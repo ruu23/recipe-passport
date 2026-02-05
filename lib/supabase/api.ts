@@ -9,7 +9,8 @@ type InstructionRow = Database["public"]["Tables"]["instructions"]["Row"]
 type NutritionRow = Database["public"]["Tables"]["nutrition_benefits"]["Row"]
 
 async function requireAuth() {
-  const user = await auth.getUser()
+  const { user, error } = await auth.getUser()
+  if (error) throw error
   if (!user) throw new Error('Not authenticated')
   return user
 }
