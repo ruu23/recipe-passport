@@ -25,6 +25,10 @@ interface Recipe {
   description?: string | null;
   history?: string | null;
   image_url?: string | null;
+
+  // ✅ NEW: One image for the Ingredients page
+  ingredients_image_url?: string | null;
+
   prep_time?: number | null;
   cook_time?: number | null;
   servings?: number | null;
@@ -37,7 +41,6 @@ interface Recipe {
   quote_text?: string | null;
   quote_highlight?: string | null;
 }
-
 
 interface Country {
   id: string;
@@ -91,8 +94,29 @@ async function uploadRecipeImage(file: File, recipeId: string) {
   return { url: data.publicUrl, error: null as any };
 }
 
+/**
+ * ✅ Upload ONE ingredients image per recipe
+ */
+async function uploadIngredientsImage(file: File, recipeId: string) {
+  if (!file.type.startsWith("image/")) throw new Error("File must be an image");
+
+  const ext = (file.name.split(".").pop() || "png").toLowerCase();
+  const path = `recipes/${recipeId}/ingredients.${ext}`;
+
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+    upsert: true,
+    contentType: file.type,
+    cacheControl: "3600",
+  });
+
+  if (error) throw error;
+
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return data.publicUrl;
+}
+
 // ----------------------------
-// ✅ Normalizers (fix TS null errors)
+// ✅ Normalizers
 // ----------------------------
 function normalizeRecipes(rows: any[]): Recipe[] {
   return (rows || [])
@@ -104,6 +128,10 @@ function normalizeRecipes(rows: any[]): Recipe[] {
       description: r.description ?? null,
       history: r.history ?? null,
       image_url: r.image_url ?? null,
+
+      // ✅ NEW
+      ingredients_image_url: r.ingredients_image_url ?? null,
+
       prep_time: r.prep_time ?? null,
       cook_time: r.cook_time ?? null,
       servings: r.servings ?? null,
@@ -112,12 +140,10 @@ function normalizeRecipes(rows: any[]): Recipe[] {
       country_name: r.country_name ?? null,
       flag_emoji: r.flag_emoji ?? null,
 
-      // ✅ NEW
       quote_text: r.quote_text ?? null,
       quote_highlight: r.quote_highlight ?? null,
     }));
 }
-
 
 function normalizeCountries(rows: any[]): Country[] {
   return (rows || [])
@@ -172,42 +198,43 @@ export default function RecipeManager() {
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
   const [selectedRecipe, setSelectedRecipe] = useState<string | null>(null);
 
-  // Form states
   const [formData, setFormData] = useState({
     name: "",
     name_local: "",
     description: "",
     history: "",
     image_url: "",
+    ingredients_image_url: "", // ✅ NEW (for preview/use)
+
     prep_time: "",
     cook_time: "",
     servings: "",
     difficulty_level: "medium" as "easy" | "medium" | "hard",
     country_id: "",
 
-    // ✅ NEW
     quote_text: "",
     quote_highlight: "",
   });
 
-  // Ingredients & Instructions
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [instructions, setInstructions] = useState<Instruction[]>([]);
   const [newIngredient, setNewIngredient] = useState({ name: "", quantity: "" });
   const [newInstruction, setNewInstruction] = useState("");
 
-  // ✅ Benefits
   const [benefits, setBenefits] = useState<Benefit[]>([]);
   const [newBenefit, setNewBenefit] = useState({ ingredient_name: "", benefit_text: "" });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Image upload
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // ✅ NEW: Ingredients image upload
+  const [ingredientsImage, setIngredientsImage] = useState<File | null>(null);
+  const [ingredientsImagePreview, setIngredientsImagePreview] = useState<string>("");
 
   useEffect(() => {
     fetchData();
@@ -219,6 +246,13 @@ export default function RecipeManager() {
     setImagePreview(url);
     return () => URL.revokeObjectURL(url);
   }, [imageFile]);
+
+  useEffect(() => {
+    if (!ingredientsImage) return;
+    const url = URL.createObjectURL(ingredientsImage);
+    setIngredientsImagePreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [ingredientsImage]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -243,7 +277,6 @@ export default function RecipeManager() {
     setLoading(false);
   };
 
-  // ✅ load Ingredients + Instructions + Benefits
   const loadRecipeDetails = async (recipeId: string) => {
     const [ingredientsRes, instructionsRes, benefitsRes] = await Promise.all([
       getIngredients(recipeId),
@@ -262,28 +295,32 @@ export default function RecipeManager() {
     setSuccess("");
 
     const baseRecipeData = {
-  name: formData.name,
-  name_local: formData.name_local || undefined,
-  description: formData.description || undefined,
-  history: formData.history || undefined,
-  image_url: formData.image_url || undefined,
-  prep_time: formData.prep_time ? parseInt(formData.prep_time, 10) : undefined,
-  cook_time: formData.cook_time ? parseInt(formData.cook_time, 10) : undefined,
-  servings: formData.servings ? parseInt(formData.servings, 10) : undefined,
-  difficulty_level: formData.difficulty_level,
-  country_id: formData.country_id || undefined,
+      name: formData.name,
+      name_local: formData.name_local || undefined,
+      description: formData.description || undefined,
+      history: formData.history || undefined,
+      image_url: formData.image_url || undefined,
 
-  // ✅ NEW (YOU MISSED THIS)
-  quote_text: formData.quote_text?.trim() || undefined,
-  quote_highlight: formData.quote_highlight?.trim() || undefined,
-};
+      // ✅ NEW
+      ingredients_image_url: formData.ingredients_image_url || undefined,
 
+      prep_time: formData.prep_time ? parseInt(formData.prep_time, 10) : undefined,
+      cook_time: formData.cook_time ? parseInt(formData.cook_time, 10) : undefined,
+      servings: formData.servings ? parseInt(formData.servings, 10) : undefined,
+      difficulty_level: formData.difficulty_level,
+      country_id: formData.country_id || undefined,
+
+      quote_text: formData.quote_text?.trim() || undefined,
+      quote_highlight: formData.quote_highlight?.trim() || undefined,
+    };
 
     try {
       setUploading(true);
 
+      let recipeId = selectedRecipe ?? editingRecipe?.id ?? null;
+
       if (editingRecipe) {
-        // Existing update logic...
+        // Update recipe image if new file chosen
         let finalImageUrl = baseRecipeData.image_url;
 
         if (imageFile) {
@@ -299,19 +336,19 @@ export default function RecipeManager() {
 
         if (upErr) throw upErr;
 
+        recipeId = editingRecipe.id;
         setSuccess("Recipe updated successfully!");
         setSelectedRecipe(editingRecipe.id);
         await loadRecipeDetails(editingRecipe.id);
       } else {
-        // ✅ NEW: Create recipe first
         const { data, error: addErr } = await addRecipe(baseRecipeData);
         if (addErr) throw addErr;
 
         const created = (data as any)?.[0];
-        const recipeId = created?.id as string | undefined;
+        recipeId = created?.id as string | undefined;
         if (!recipeId) throw new Error("Recipe not created (missing id)");
 
-        // ✅ Handle image upload if provided
+        // upload recipe image
         if (imageFile) {
           const up = await uploadRecipeImage(imageFile, recipeId);
           if (up.error) throw up.error;
@@ -320,7 +357,6 @@ export default function RecipeManager() {
           if (imgErr) throw imgErr;
         }
 
-        // ✅ Set the selected recipe and switch to edit mode
         setSelectedRecipe(recipeId);
         setEditingRecipe({
           id: recipeId,
@@ -329,6 +365,10 @@ export default function RecipeManager() {
           description: formData.description || null,
           history: formData.history || null,
           image_url: imageFile ? undefined : (formData.image_url || null),
+
+          // ✅ NEW
+          ingredients_image_url: formData.ingredients_image_url || null,
+
           prep_time: formData.prep_time ? parseInt(formData.prep_time, 10) : null,
           cook_time: formData.cook_time ? parseInt(formData.cook_time, 10) : null,
           servings: formData.servings ? parseInt(formData.servings, 10) : null,
@@ -340,27 +380,32 @@ export default function RecipeManager() {
           quote_highlight: formData.quote_highlight || null,
         });
 
-        // ✅ Load empty details (no ingredients/instructions yet)
         await loadRecipeDetails(recipeId);
-        
-        // ✅ Keep the form open so user can add details
         setSuccess("Recipe created! Now add ingredients, instructions, and benefits.");
-        
-        // ✅ Don't close the form, don't clear formData
-        // setShowForm(false); // ← Remove this
-        
         await fetchData();
       }
 
-      // ✅ Only clear image-related states
-      setImageFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      // ✅ Upload Ingredients image after we have the real recipeId
+      if (ingredientsImage && recipeId) {
+        const url = await uploadIngredientsImage(ingredientsImage, recipeId);
+        const { error: ingImgErr } = await updateRecipe(recipeId, { ingredients_image_url: url });
+        if (ingImgErr) throw ingImgErr;
 
-      // ✅ Don't reset form when creating new recipe (only when updating)
-      if (editingRecipe) {
-        setImagePreview("");
+        // keep in form for preview & editing
+        setFormData((p) => ({ ...p, ingredients_image_url: url }));
+        setSuccess("Saved successfully (including Ingredients image) ✅");
       }
 
+      // clear recipe image file input
+      setImageFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      setImagePreview("");
+
+      // clear ingredients image local file (keep url)
+      setIngredientsImage(null);
+      setIngredientsImagePreview("");
+
+      await fetchData();
     } catch (err: any) {
       console.error(err);
       setError(err?.message || "An error occurred");
@@ -374,19 +419,23 @@ export default function RecipeManager() {
     setError("");
 
     setEditingRecipe(recipe);
+
     setFormData({
       name: recipe.name,
       name_local: recipe.name_local || "",
       description: recipe.description || "",
       history: recipe.history || "",
       image_url: recipe.image_url || "",
+
+      // ✅ NEW
+      ingredients_image_url: recipe.ingredients_image_url || "",
+
       prep_time: recipe.prep_time?.toString() || "",
       cook_time: recipe.cook_time?.toString() || "",
       servings: recipe.servings?.toString() || "",
       difficulty_level: recipe.difficulty_level || "medium",
       country_id: recipe.country_id || "",
 
-      // ✅ NEW
       quote_text: recipe.quote_text || "",
       quote_highlight: recipe.quote_highlight || "",
     });
@@ -394,6 +443,10 @@ export default function RecipeManager() {
     setImageFile(null);
     setImagePreview(recipe.image_url || "");
     if (fileInputRef.current) fileInputRef.current.value = "";
+
+    // ✅ show ingredients image preview from saved url
+    setIngredientsImage(null);
+    setIngredientsImagePreview(recipe.ingredients_image_url || "");
 
     setShowForm(true);
     setSelectedRecipe(recipe.id);
@@ -480,7 +533,6 @@ export default function RecipeManager() {
     }
   };
 
-  // ✅ Benefits handlers
   const handleAddBenefit = async () => {
     if (!selectedRecipe) return;
     if (!newBenefit.ingredient_name.trim() || !newBenefit.benefit_text.trim()) return;
@@ -536,13 +588,14 @@ export default function RecipeManager() {
       description: "",
       history: "",
       image_url: "",
+      ingredients_image_url: "",
+
       prep_time: "",
       cook_time: "",
       servings: "",
       difficulty_level: "medium",
       country_id: "",
 
-      // ✅ NEW
       quote_text: "",
       quote_highlight: "",
     });
@@ -550,6 +603,9 @@ export default function RecipeManager() {
     setImageFile(null);
     setImagePreview("");
     if (fileInputRef.current) fileInputRef.current.value = "";
+
+    setIngredientsImage(null);
+    setIngredientsImagePreview("");
 
     setError("");
     setSuccess("");
@@ -570,7 +626,7 @@ export default function RecipeManager() {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-[#6B4423]">Recipes ({recipes.length})</h2>
         <button
-          onClick={() => showForm ? handleCancel() : setShowForm(true)}
+          onClick={() => (showForm ? handleCancel() : setShowForm(true))}
           className="bg-[#6B4423] text-white px-4 py-2 rounded hover:bg-[#8B5A2B] transition-colors"
         >
           {showForm ? "✕ Cancel" : "+ Add Recipe"}
@@ -673,9 +729,7 @@ export default function RecipeManager() {
 
             {/* image url */}
             <div>
-              <label className="block text-sm font-semibold text-[#6B4423] mb-1">
-                Image URL (optional)
-              </label>
+              <label className="block text-sm font-semibold text-[#6B4423] mb-1">Image URL (optional)</label>
               <input
                 type="url"
                 value={formData.image_url}
@@ -684,11 +738,9 @@ export default function RecipeManager() {
               />
             </div>
 
-            {/* file upload */}
+            {/* recipe image upload */}
             <div>
-              <label className="block text-sm font-semibold text-[#6B4423] mb-1">
-                Recipe Image Upload
-              </label>
+              <label className="block text-sm font-semibold text-[#6B4423] mb-1">Recipe Image Upload</label>
 
               <input
                 ref={fileInputRef}
@@ -709,6 +761,30 @@ export default function RecipeManager() {
                   <img
                     src={imagePreview || formData.image_url}
                     alt="preview"
+                    className="w-full max-w-md h-48 object-cover rounded-lg border"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* ✅ Ingredients page image */}
+            <div className="mt-2">
+              <label className="block text-sm font-semibold text-[#6B4423] mb-1">
+                Ingredients Page Image (one image)
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setIngredientsImage(e.target.files?.[0] || null)}
+                className="w-full px-4 py-2 border-2 border-[#D4A439] rounded"
+              />
+
+              {(ingredientsImagePreview || formData.ingredients_image_url) && (
+                <div className="mt-3">
+                  <p className="text-sm text-[#6B4423] font-semibold mb-2">Ingredients Image Preview</p>
+                  <img
+                    src={ingredientsImagePreview || formData.ingredients_image_url}
+                    alt="ingredients preview"
                     className="w-full max-w-md h-48 object-cover rounded-lg border"
                   />
                 </div>
@@ -738,6 +814,7 @@ export default function RecipeManager() {
                         </div>
                       ))}
                     </div>
+
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -846,44 +923,10 @@ export default function RecipeManager() {
                     </div>
                   </div>
                 </div>
-
-                <p className="text-xs text-gray-500 mt-4">
-                  Tip: Ingredients, instructions, and benefits are saved per recipe.
-                </p>
               </div>
             )}
 
-            {/* ✅ Quote */}
-            <div>
-              <label className="block text-sm font-semibold text-[#6B4423] mb-1">
-                Quote Text
-              </label>
-              <textarea
-                value={formData.quote_text}
-                onChange={(e) => setFormData({ ...formData, quote_text: e.target.value })}
-                rows={3}
-                className="w-full px-4 py-2 border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423]"
-                placeholder='Example: "Some problems need answers. Others need"'
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-[#6B4423] mb-1">
-                Quote Highlight (optional)
-              </label>
-              <input
-                type="text"
-                value={formData.quote_highlight}
-                onChange={(e) => setFormData({ ...formData, quote_highlight: e.target.value })}
-                className="w-full px-4 py-2 border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423]"
-                placeholder="Example: MULUKHIYAH"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                If empty, you can display the recipe name as the highlight.
-              </p>
-            </div>
-
-            {/* Buttons */}
+            {/* Submit */}
             <div className="flex gap-3">
               <button
                 type="submit"
@@ -963,3 +1006,6 @@ export default function RecipeManager() {
     </div>
   );
 }
+ 
+
+  

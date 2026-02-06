@@ -11,7 +11,7 @@ type Country = {
   id: string;
   name: string;
   flag_emoji?: string | null;
-  flag_url?: string | null; // ✅ Add this
+  flag_url?: string | null;
   image_url?: string | null;
   description?: string | null;
 };

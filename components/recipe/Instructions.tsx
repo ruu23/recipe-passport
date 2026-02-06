@@ -84,22 +84,6 @@ export default function InstructionsPage() {
           </div>
         </div>
 
-        {/* Bottom nav buttons (optional like your ingredients page) */}
-        <div className="flex justify-between mt-10">
-          <button
-            onClick={() => router.push(`/recipes/${id}/ingredients`)}
-            className="px-5 py-3 rounded-full bg-white border border-[#5A2F1B]/30 text-[#5A2F1B] font-bold"
-          >
-            ← Prev
-          </button>
-
-          <button
-            onClick={() => router.push(`/recipe/${id}/benefits`)}
-            className="px-5 py-3 rounded-full bg-[#7A3B20] text-white font-bold"
-          >
-            NUTRITION &amp; BENEFITS
-          </button>
-        </div>
       </div>
     </div>
   );

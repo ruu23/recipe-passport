@@ -73,4 +73,45 @@
     @apply w-24 h-24 rounded-full flex items-center justify-center 
            bg-card text-cream transition-all cursor-pointer;
   }
+
+  /* Primary button: cocoa background */
+  .btn-cocoa {
+    @apply inline-flex items-center justify-center gap-2
+           rounded-full px-7 py-3 md:px-9 md:py-4
+           bg-cocoa text-whiteSoft
+           font-title uppercase tracking-wider
+           shadow-lg transition
+           hover:opacity-90 active:scale-[0.98];
+  }
+
+  /* Secondary button: yellow card background */
+  .btn-card {
+    @apply inline-flex items-center justify-center gap-2
+           rounded-full px-7 py-3 md:px-9 md:py-4
+           bg-card text-cocoa
+           font-title uppercase tracking-wider
+           shadow-lg transition
+           hover:brightness-95 active:scale-[0.98];
+  }
+
+  /* Outline button: cream bg + cocoa border */
+  .btn-outline-cocoa {
+    @apply inline-flex items-center justify-center gap-2
+           rounded-full px-7 py-3 md:px-9 md:py-4
+           bg-cream text-cocoa
+           border-2 border-cocoa
+           font-title uppercase tracking-wider
+           transition
+           hover:bg-cocoa hover:text-whiteSoft
+           active:scale-[0.98];
+  }
+
+  /* Icon-only round button (like your arrow / play) */
+  .btn-icon {
+    @apply inline-flex items-center justify-center
+           w-14 h-14 md:w-16 md:h-16
+           rounded-full bg-card text-cocoa
+           shadow-lg transition
+           hover:brightness-95 active:scale-[0.98];
+  }
 }

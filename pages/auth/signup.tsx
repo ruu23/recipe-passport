@@ -71,35 +71,33 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF8E7] flex flex-col">
+    <div className="page-bg flex flex-col">
       {/* Header */}
-      <div className="w-full bg-gradient-to-r from-[#E8B44F] to-[#D4A439] h-16 flex items-center justify-center">
+      <div className="w-full bg-card h-16 flex items-center justify-center">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-[#6B4423] rounded-full"></div>
-          <div className="w-2 h-2 bg-[#6B4423] rounded-full"></div>
-          <div className="w-2 h-2 bg-[#6B4423] rounded-full"></div>
+          <div className="w-2 h-2 bg-cocoa rounded-full"></div>
+          <div className="w-2 h-2 bg-cocoa rounded-full"></div>
+          <div className="w-2 h-2 bg-cocoa rounded-full"></div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8">
+      <div className="flex-1 flex items-center justify-center px-4 py-8 tracking-wider">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <h1
-              className="text-4xl md:text-5xl font-bold text-[#6B4423] mb-2"
-              style={{ fontFamily: "Georgia, serif" }}
+              className="title text-4xl md:text-5xl font-bold mb-2"
             >
               BE PART OF OUR
             </h1>
             <h1
-              className="text-4xl md:text-5xl font-bold text-[#6B4423] flex items-center justify-center gap-2"
-              style={{ fontFamily: "Georgia, serif" }}
+              className="title text-4xl md:text-5xl font-bold flex items-center justify-center gap-2"
             >
-              FAMILY <span className="text-5xl">❤️</span>
+              FAMILY <span className="text-5xl">{`<3`}</span>
             </h1>
-            <p className="text-sm text-[#6B4423] mt-4 uppercase tracking-wide">
+            <p className="subtitle text-sm mt-4 uppercase tracking-wide">
               Already registered?{" "}
-              <Link href="/auth/login" className="underline hover:text-[#8B5A2B]">
+              <Link href="/auth/login" className="underline hover:cursor-pointer">
                 Login
               </Link>
             </p>
@@ -114,7 +112,7 @@ export default function SignUp() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Input */}
             <div>
-              <label className="block text-xs font-semibold text-[#6B4423] mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold mb-1 uppercase tracking-wide">
                 Name
               </label>
               <input
@@ -124,13 +122,13 @@ export default function SignUp() {
                 onChange={handleChange}
                 placeholder="Sara Martins"
                 required
-                className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
+                className="w-full px-4 py-3 bg-white border-2 rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
               />
             </div>
 
             {/* Email Input */}
             <div>
-              <label className="block text-xs font-semibold text-[#6B4423] mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold mb-1 uppercase tracking-wide">
                 Email
               </label>
               <input
@@ -140,13 +138,13 @@ export default function SignUp() {
                 onChange={handleChange}
                 placeholder="hello@sarasmasterclass.com"
                 required
-                className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
+                className="w-full px-4 py-3 bg-white border-2 rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
               />
             </div>
 
             {/* Password Input */}
             <div>
-              <label className="block text-xs font-semibold text-[#6B4423] mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold mb-1 uppercase tracking-wide">
                 Password
               </label>
               <input
@@ -156,13 +154,13 @@ export default function SignUp() {
                 onChange={handleChange}
                 placeholder="••••••"
                 required
-                className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
+                className="w-full px-4 py-3 bg-white border-2 rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
               />
             </div>
 
             {/* Date of Birth Input */}
             <div>
-              <label className="block text-xs font-semibold text-[#6B4423] mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold mb-1 uppercase tracking-wide">
                 Date of Birth
               </label>
               <input
@@ -171,18 +169,20 @@ export default function SignUp() {
                 value={formData.dateOfBirth}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-white border-2 border-[#D4A439] rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
+                className="w-full px-4 py-3 bg-white border-2 rounded focus:outline-none focus:border-[#6B4423] text-gray-800"
               />
             </div>
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#6B4423] text-white font-bold py-3 px-6 rounded hover:bg-[#8B5A2B] transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide"
-            >
-              {loading ? "Signing up..." : "Sign Up"}
-            </button>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-cocoa text-white font-bold py-3 px-6 rounded hover:cursor-pointer uppercase tracking-wide"
+              >
+                {loading ? "Signing up..." : "Sign Up"}
+              </button>
+            </div>
           </form>
         </div>
       </div>
