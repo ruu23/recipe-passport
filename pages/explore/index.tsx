@@ -47,7 +47,7 @@ export default function ExplorePage() {
       <main className="px-6 lg:px-16 pt-10 pb-16">
         <div className="relative w-full max-w-6xl mx-auto rounded-[32px] overflow-hidden">
         {/* Hero Image */}
-        <div className="relative w-full min-h-screen">
+        <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px]">
           <Image
             src="/images/exploreBG.png"
             alt="The countries of the world"
@@ -57,7 +57,7 @@ export default function ExplorePage() {
           />
 
           {/* ✅ Title overlay like Canva */}
-          <div className="absolute inset-x-0 top-10 flex flex-col items-center text-center px-6">
+          <div className="absolute inset-x-0 top-8 sm:top-12 md:top-16 lg:top-20 flex flex-col items-center text-center px-6">
             <h1 className="title text-[40px] md:text-[64px] leading-[0.95] text-cocoa drop-shadow-sm">
               A PASSPORT TO FLAVOR
             </h1>

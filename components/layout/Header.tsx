@@ -22,36 +22,36 @@ function Header() {
   const [role, setRole] = useState<"user" | "editor" | "admin" | null>(null);
 
   useEffect(() => {
-  let ignore = false;
+    let ignore = false;
 
-  const loadRole = async () => {
-    if (!user?.id) {
-      setRole(null);
-      return;
-    }
+    const loadRole = async () => {
+      if (!user?.id) {
+        setRole(null);
+        return;
+      }
 
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
 
-    if (ignore) return;
+      if (ignore) return;
 
-    if (error) {
-      setRole(null);
-      return;
-    }
+      if (error) {
+        setRole(null);
+        return;
+      }
 
-    const r = data?.role;
-    setRole(isRole(r) ? r : null);
-  };
+      const r = data?.role;
+      setRole(isRole(r) ? r : null);
+    };
 
-  loadRole();
-  return () => {
-    ignore = true;
-  };
-}, [user]);
+    loadRole();
+    return () => {
+      ignore = true;
+    };
+  }, [user]);
 
   const go = (path: string) => {
     setOpen(false);
@@ -82,28 +82,37 @@ function Header() {
   }, [open]);
 
   return (
-    <header className="w-full px-6 lg:px-12 pt-6 bg-cream">
+    <header className="w-full px-6 lg:px-12 pt-6 bg-cream relative z-50">
       <div className="flex items-center justify-between lg:grid lg:grid-cols-3">
         <div className="relative" ref={menuRef}>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="lg:hidden inline-flex items-center justify-center w-12 h-12 rounded-full bg-card text-cocoa"
+            className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full bg-card text-cocoa"
             aria-label="Open menu"
             aria-expanded={open}
           >
-            <FiMenu className="text-2xl" />
+            <FiMenu className="text-xl" />
           </button>
 
           {open && (
-            <div className="lg:hidden absolute left-0 mt-3 w-56 rounded-2xl bg-card shadow-lg p-3">
-              <button className="w-full text-left nav-item block px-3 py-2 rounded-xl hover:bg-white/30" onClick={() => go("/home")}>
+            <div className="lg:hidden absolute left-0 mt-2 w-40 rounded-xl bg-card shadow-xl z-[100] p-2">
+              <button 
+                className="w-full text-left nav-item block px-3 py-1.5 rounded-lg hover:bg-white/30 text-sm" 
+                onClick={() => go("/home")}
+              >
                 Home
               </button>
-              <button className="w-full text-left nav-item block px-3 py-2 rounded-xl hover:bg-white/30" onClick={() => go("/explore")}>
+              <button 
+                className="w-full text-left nav-item block px-3 py-1.5 rounded-lg hover:bg-white/30 text-sm" 
+                onClick={() => go("/explore")}
+              >
                 Explore
               </button>
-              <button className="w-full text-left nav-item block px-3 py-2 rounded-xl hover:bg-white/30" onClick={() => go("/about")}>
+              <button 
+                className="w-full text-left nav-item block px-3 py-1.5 rounded-lg hover:bg-white/30 text-sm" 
+                onClick={() => go("/about")}
+              >
                 About
               </button>
             </div>
@@ -120,11 +129,11 @@ function Header() {
 
         <div className="flex justify-end items-center gap-4">
           <button type="button" className="hover:cursor-pointer" onClick={handleUserIconClick}>
-            <Image src={UserIcon} alt="Profile" className="w-12 h-12" />
+            <Image src={UserIcon} alt="Profile" className="w-10 h-10" />
           </button>
 
           <button type="button" className="hover:cursor-pointer" onClick={() => go("/favorites")}>
-            <Image src={PlateIcon} alt="Plate" className="w-14 h-10" />
+            <Image src={PlateIcon} alt="Plate" className="w-12 h-9" />
           </button>
         </div>
       </div>

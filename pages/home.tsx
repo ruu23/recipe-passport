@@ -105,20 +105,20 @@ export default function Home() {
         <Intro />
 
         {/* Quote card under TODAY'S RECIPE */}
-        <div className="mt-15 max-w-[910px] min-h-screen">
+        <div className="mt-8 sm:mt-15 w-full max-w-[910px] px-6 sm:px-4 md:px-0">
           <div
-            className="relative rounded-[28px] bg-cover bg-center px-10 py-14 min-h-screen"
+            className="relative rounded-[20px] sm:rounded-[28px] bg-contain bg-no-repeat bg-center px-6 sm:px-10 py-16 sm:py-14 min-h-[400px] sm:min-h-[600px] md:min-h-screen w-full sm:max-w-full mx-auto flex flex-col justify-center items-center"
             style={{ backgroundImage: "url('/images/quote-bg.png')" }}
           >
             {/* Quote text */}
-            <h1 className="title text-[44px] sm:text-[70px] md:text-[90px] leading-tight text-start max-w-[520px] mx-auto whitespace-pre-line">
+            <h1 className="title text-[28px] sm:text-[44px] md:text-[70px] lg:text-[90px] leading-tight text-center max-w-full sm:max-w-[520px] whitespace-pre-line">
               {recipe.quote_text || "A recipe worth slowing down for."}
             </h1>
 
             {/* Highlight pill */}
-            <div className="mt-6 flex justify-center">
-              <div className="bg-black px-8 py-3 rounded-md">
-                <span className="title text-[#F0C84B] text-[30px] sm:text-[50px] md:text-[70px] tracking-wide">
+            <div className="mt-6 sm:mt-8 md:mt-10 flex justify-center">
+              <div className="bg-black px-3 sm:px-6 md:px-8 py-1.5 sm:py-2 md:py-3 rounded-md max-w-full">
+                <span className="title text-[#F0C84B] text-[20px] sm:text-[36px] md:text-[50px] lg:text-[70px] tracking-wide break-words text-center block">
                   {(
                     recipe.quote_highlight ||
                     recipe.name 

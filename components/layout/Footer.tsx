@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="bg-cream px-6 md:px-16 pt-20 pb-5">
+    <footer className="bg-cream px-6 md:px-16 pt-5 pb-5">
       <div className="mx-auto">
         {/* Title */}
         <h1 className="title text-[48px] md:text-[56px]">
