@@ -79,6 +79,7 @@ export async function getRecipes() {
       description,
       history,
       image_url,
+      ingredients_image_url,
       prep_time,
       cook_time,
       servings,
@@ -93,7 +94,6 @@ export async function getRecipes() {
     )
     .order("created_at", { ascending: false });
 
-  // normalize shape for UI
   const mapped =
     data?.map((r: any) => ({
       ...r,
@@ -105,6 +105,7 @@ export async function getRecipes() {
 }
 
 
+
 /**
  * Add a new recipe
  */
@@ -114,6 +115,7 @@ export async function addRecipe(recipe: {
   description?: string;
   history?: string;
   image_url?: string;
+  ingredients_image_url?: string; // ✅ add
   prep_time?: number;
   cook_time?: number;
   servings?: number;
@@ -128,6 +130,7 @@ export async function addRecipe(recipe: {
   return { data, error };
 }
 
+
 /**
  * Update a recipe
  */
@@ -139,6 +142,7 @@ export async function updateRecipe(
     description?: string;
     history?: string;
     image_url?: string;
+    ingredients_image_url?: string; // ✅ add
     prep_time?: number;
     cook_time?: number;
     servings?: number;
@@ -154,6 +158,7 @@ export async function updateRecipe(
 
   return { data, error };
 }
+
 
 /**
  * Delete a recipe
