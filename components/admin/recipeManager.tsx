@@ -6,14 +6,8 @@ import {
   deleteRecipe,
   getCountries,
   getIngredients,
-  addIngredient,
-  deleteIngredient,
   getInstructions,
-  addInstruction,
-  deleteInstruction,
   getNutritionBenefits,
-  addNutritionBenefit,
-  deleteNutritionBenefit,
 } from "@/lib/supabase/admin";
 
 import { supabase } from "@/lib/supabase/client";
@@ -25,8 +19,6 @@ interface Recipe {
   description?: string | null;
   history?: string | null;
   image_url?: string | null;
-
-  // ✅ ONE image for ingredients section (stored on recipes table)
   ingredients_image_url?: string | null;
 
   prep_time?: number | null;
@@ -127,10 +119,7 @@ function normalizeRecipes(rows: any[]): Recipe[] {
       description: r.description ?? null,
       history: r.history ?? null,
       image_url: r.image_url ?? null,
-
-      // ✅ NEW
       ingredients_image_url: r.ingredients_image_url ?? null,
-
       prep_time: r.prep_time ?? null,
       cook_time: r.cook_time ?? null,
       servings: r.servings ?? null,
@@ -427,108 +416,7 @@ export default function RecipeManager() {
     }
   };
 
-  const handleAddIngredient = async () => {
-    if (!selectedRecipe || !newIngredient.name.trim()) return;
-
-    try {
-      const { error } = await addIngredient({
-        recipe_id: selectedRecipe,
-        name: newIngredient.name.trim(),
-        quantity: newIngredient.quantity || undefined,
-        order_index: ingredients.length,
-      });
-      if (error) throw error;
-
-      setNewIngredient({ name: "", quantity: "" });
-      await loadRecipeDetails(selectedRecipe);
-      setSuccess("Ingredient added!");
-    } catch (err: any) {
-      setError(err?.message || "Failed to add ingredient");
-    }
-  };
-
-  const handleDeleteIngredient = async (id: string) => {
-    if (!selectedRecipe) return;
-
-    try {
-      const { error } = await deleteIngredient(id);
-      if (error) throw error;
-
-      await loadRecipeDetails(selectedRecipe);
-      setSuccess("Ingredient deleted!");
-    } catch (err: any) {
-      setError(err?.message || "Failed to delete ingredient");
-    }
-  };
-
-  const handleAddInstruction = async () => {
-    if (!selectedRecipe || !newInstruction.trim()) return;
-
-    try {
-      const { error } = await addInstruction({
-        recipe_id: selectedRecipe,
-        step_number: instructions.length + 1,
-        instruction_text: newInstruction.trim(),
-      });
-      if (error) throw error;
-
-      setNewInstruction("");
-      await loadRecipeDetails(selectedRecipe);
-      setSuccess("Instruction added!");
-    } catch (err: any) {
-      setError(err?.message || "Failed to add instruction");
-    }
-  };
-
-  const handleDeleteInstruction = async (id: string) => {
-    if (!selectedRecipe) return;
-
-    try {
-      const { error } = await deleteInstruction(id);
-      if (error) throw error;
-
-      await loadRecipeDetails(selectedRecipe);
-      setSuccess("Instruction deleted!");
-    } catch (err: any) {
-      setError(err?.message || "Failed to delete instruction");
-    }
-  };
-
-  const handleAddBenefit = async () => {
-    if (!selectedRecipe) return;
-    if (!newBenefit.ingredient_name.trim() || !newBenefit.benefit_text.trim()) return;
-
-    try {
-      const { error } = await addNutritionBenefit({
-        recipe_id: selectedRecipe,
-        ingredient_name: newBenefit.ingredient_name.trim(),
-        benefit_text: newBenefit.benefit_text.trim(),
-        order_index: benefits.length,
-      });
-
-      if (error) throw error;
-
-      setNewBenefit({ ingredient_name: "", benefit_text: "" });
-      await loadRecipeDetails(selectedRecipe);
-      setSuccess("Benefit added!");
-    } catch (err: any) {
-      setError(err?.message || "Failed to add benefit");
-    }
-  };
-
-  const handleDeleteBenefit = async (id: string) => {
-    if (!selectedRecipe) return;
-
-    try {
-      const { error } = await deleteNutritionBenefit(id);
-      if (error) throw error;
-
-      await loadRecipeDetails(selectedRecipe);
-      setSuccess("Benefit deleted!");
-    } catch (err: any) {
-      setError(err?.message || "Failed to delete benefit");
-    }
-  };
+  
 
   const handleCancel = () => {
     setShowForm(false);
@@ -603,7 +491,6 @@ export default function RecipeManager() {
           <h3 className="text-xl font-bold text-[#6B4423] mb-4">{editingRecipe ? "Edit Recipe" : "Add New Recipe"}</h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* ... keep your existing fields as-is ... */}
 
             {/* ✅ Ingredients Image Upload (ONE per recipe) */}
             <div className="border-t pt-4">
@@ -702,7 +589,7 @@ export default function RecipeManager() {
       {recipes.length === 0 && (
         <div className="text-center py-12 bg-white rounded-lg">
           <p className="text-gray-500 text-lg">No recipes added yet.</p>
-          <p className="text-gray-400 text-sm mt-2">Click "Add Recipe" to get started!</p>
+          <p className="text-gray-400 text-sm mt-2">Click {`"Add Recipe"`} to get started!</p>
         </div>
       )}
     </div>

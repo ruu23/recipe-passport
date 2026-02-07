@@ -95,64 +95,64 @@ export default function CountryPage() {
       }
 
       const setIds = new Set<string>((data ?? []).map((x: any) => String(x.recipe_id)));
-      setFavorites(setIds);
-    })();
-  }, [userId, recipes]);
+          setFavorites(setIds);
+        })();
+      }, [userId, recipes]);
 
-  const toggleFavorite = async (e: React.MouseEvent, recipeId: string) => {
-    e.preventDefault(); // stop Link navigation
-    e.stopPropagation();
+      const toggleFavorite = async (e: React.MouseEvent, recipeId: string) => {
+        e.preventDefault(); // stop Link navigation
+        e.stopPropagation();
 
-    if (!userId) {
-      alert("Please login to save favorites.");
-      return;
-    }
+        if (!userId) {
+          alert("Please login to save favorites.");
+          return;
+        }
 
-    const isFav = favorites.has(recipeId);
+        const isFav = favorites.has(recipeId);
 
-    try {
-      setFavLoadingId(recipeId);
+        try {
+          setFavLoadingId(recipeId);
 
-      if (isFav) {
-        const { error } = await supabase
-          .from("user_favorites")
-          .delete()
-          .eq("user_id", userId)
-          .eq("recipe_id", recipeId);
+          if (isFav) {
+            const { error } = await supabase
+              .from("user_favorites")
+              .delete()
+              .eq("user_id", userId)
+              .eq("recipe_id", recipeId);
 
-        if (error) throw error;
+            if (error) throw error;
 
-        setFavorites((prev) => {
-          const next = new Set(prev);
-          next.delete(recipeId);
-          return next;
-        });
-      } else {
-        const { error } = await supabase.from("user_favorites").insert({
-          user_id: userId,
-          recipe_id: recipeId,
-        });
+            setFavorites((prev) => {
+              const next = new Set(prev);
+              next.delete(recipeId);
+              return next;
+            });
+          } else {
+            const { error } = await supabase.from("user_favorites").insert({
+              user_id: userId,
+              recipe_id: recipeId,
+            });
 
-        if (error) throw error;
+            if (error) throw error;
 
-        setFavorites((prev) => {
-          const next = new Set(prev);
-          next.add(recipeId);
-          return next;
-        });
-      }
-    } catch (err: any) {
-      console.error(err);
-      alert(err?.message || "Failed to update favorite");
-    } finally {
-      setFavLoadingId(null);
-    }
-  };
+            setFavorites((prev) => {
+              const next = new Set(prev);
+              next.add(recipeId);
+              return next;
+            });
+          }
+        } catch (err: any) {
+          console.error(err);
+          alert(err?.message || "Failed to update favorite");
+        } finally {
+          setFavLoadingId(null);
+        }
+      };
 
-  const title = useMemo(() => {
-    if (!country) return "Country";
-    return country.name.toUpperCase();
-  }, [country]);
+      const title = useMemo(() => {
+        if (!country) return "Country";
+        return country.name.toUpperCase();
+      }, [country]);
 
   if (loading) {
     return (

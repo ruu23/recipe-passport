@@ -5,7 +5,7 @@ import { getCountries, addCountry, updateCountry, deleteCountry } from "@/lib/su
 interface Country {
   id: string;
   name: string;
-  flag_url?: string | null; // ✅ flag image url
+  flag_url?: string | null;
   description?: string | null;
   image_url?: string | null;
   created_at?: string | null;
@@ -384,7 +384,7 @@ export default function CountryManager() {
         <div className="text-center py-12 bg-white rounded-lg">
           <p className="text-gray-500 text-lg">No countries added yet.</p>
           <p className="text-gray-400 text-sm mt-2">
-            Click "Add Country" to get started!
+            Click {`"Add Country"`} to get started!
           </p>
         </div>
       )}

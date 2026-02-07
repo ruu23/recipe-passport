@@ -27,7 +27,7 @@ export default function FavoritesPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/auth/login"); // ✅ Fixed: was "/login", now "/auth/login"
+        router.push("/auth/login");
         return;
       }
 
